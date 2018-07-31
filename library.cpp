@@ -58,6 +58,14 @@ float distance3D(float pX, float pY, float pZ, float eX, float eY, float eZ) {
     return sqrt(pow(pX - eX, 2.0) + pow(pY - eY, 2.0) + pow(pZ - eZ, 2.0));
 }
 
+uintptr_t aimYOffs[] = {0x4D10};
+uintptr_t aimXOffs[] = {0x4D14};
+uintptr_t* add = (uintptr_t *) 0x55A86A74;
+
+uintptr_t* aimY = (uintptr_t*)addressFinder(add,{ aimYOffs });
+
+uintptr_t* aimX = (uintptr_t*)addressFinder(add,{ aimXOffs });
+
 soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     float fovAllow = 20;
     float distAllow = 20;
@@ -67,17 +75,26 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     float minDist = 9999999999.0;
     float enDist = minDist;
     float angleX, angleY, cloAngleX, cloAngleY = 0.0;
-    int * numOfPlayers = (int*)(0x50f500);
+    int numOfPlayers = (int)ents.size();
     bool found = false;
 
-    for (int i = 0; i < (*numOfPlayers); i++)
+    for (int i = 0; i < (numOfPlayers - 1); i++)
     {
-        if (IsValidEnt(ents.at(i))) //won't go in yet because isvalid should always be returning false
-        {
-            enemy = ents.at(i);
+//        if (IsValidEnt(ents.at(i))) {//won't go in yet because isvalid should always be returning false
+
+            enemy = ents[i];
+            if(i == 2){
+                system("CLS");
+                std::cout << "\nhealth of" << i  << ": " << enemy->health << "\n";
+                std::cout << enemy->position.x << "\n";
+                std::cout << enemy->position.y << "\n";
+                std::cout << enemy->position.z << "\n";
+            }
+
             if (enemy->health > 0 && enemy->health <= 100){//check if alive
 //                if(enemy->team != player->team && (enemy->team == 0 || enemy->team == 1)) {
                     enDist = distance3D(player->position.x, player->position.y, player->position.z, enemy->position.x, enemy->position.y, enemy->position.z);
+//                    std::cout << "distance" << ": " << enDist << "\n";
                     angleX = (-(float) atan2(enemy->position.x - player->position.x, enemy->position.y - player->position.y)) / 3.14159265358979323846 * 180.0f + 180.0f;
                     angleY = (atan2(enemy->position.z - player->position.z, enDist)) * 180.0f / 3.14159265358979323846;
 
@@ -95,7 +112,7 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
                     }
                 }
             }
-        }
+//        }
 
     if (found) {
         cloAngleX = player->aimCoords.x + (cloAngleX - player->aimCoords.x) / smoothNum;
@@ -103,6 +120,16 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 
         cloAngleY = player->aimCoords.y + (cloAngleY - player->aimCoords.y) / smoothNum;
         player->aimCoords.y = cloAngleY;
+
+
+        *aimY = cloAngleY;
+        *aimX = cloAngleX;
+//        std::cout << "start" << "\n";
+        std::cout << "cloY: " << cloAngleY << "mine: " << *(float*)aimY << "\n";
+        std::cout << "cloX: " << cloAngleX << "mine: " << *(float*)aimX << "\n";
+
+
+
     }
     return player;
 }
@@ -118,13 +145,7 @@ std::vector<soldier *> ents;
 
 // aimY 0x55A86A74 dereferenced the offset with 0x4D10
 // aimX is above but with 0x4D14
-uintptr_t aimYOffs[] = {0x4D10};
-uintptr_t aimXOffs[] = {0x4D14};
-uintptr_t* add = (uintptr_t *) 0x55A86A74;
 
-uintptr_t* aimY = (uintptr_t*)addressFinder(add,{ aimYOffs });
-
-uintptr_t* aimX = (uintptr_t*)addressFinder(add,{ aimXOffs });
 
 DWORD __stdcall hackthread(void* param)
 {
@@ -147,26 +168,25 @@ DWORD __stdcall hackthread(void* param)
     {
         if (GetAsyncKeyState(VK_RBUTTON) || GetAsyncKeyState(VK_LCONTROL)) {
 
-//            Aimbot(localPlayer, entList);
-            system("CLS");
-            std::cout << "0 " << localPlayer->health << "\n";
-            for(int i = 1; i < numPlayers; i++){
-                soldier * current =  *(soldier **) (baseEntity + (0x10 * i));
-                std::cout << i << " " << current->health << "\n";
-
+            Aimbot(localPlayer, ents);
+//            system("CLS");
+//            std::cout << "0 " << localPlayer->health << "\n";
+//            for(int i = 1; i < numPlayers; i++){
+//                soldier * current =  *(soldier **) (baseEntity + (0x10 * i));
+//                std::cout << i << " " << current->health << "\n";
 //                std::cout << i << " " << ents[i]->health<< "\n";
-            }
+//            }
 
 
 
-            if (aimY != 0) {        // safe to dereference
+//            if (aimY != 0) {        // safe to dereference
 //                *aimY = 20;
 //                *aimX = 20;
-                std::cout << "start" << "\n";
-                std::cout << *(float*)aimY << "\n";
-                std::cout << *(float*)aimX << "\n";
-
-            }
+//                std::cout << "start" << "\n";
+//                std::cout << *(float*)aimY << "\n";
+//                std::cout << *(float*)aimX << "\n";
+//
+//            }
         }
 //        Sleep(10);
     }
