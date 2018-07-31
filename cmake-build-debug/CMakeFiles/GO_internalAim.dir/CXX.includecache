@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/myGit/CSGO/GO_internalAim/library.cpp
+library.h
+C:/myGit/CSGO/GO_internalAim/library.h
+windows.h
+-
+iostream
+-
+vector
+-
+
+C:/myGit/CSGO/GO_internalAim/library.h
+

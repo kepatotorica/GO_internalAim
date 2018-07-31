@@ -1,0 +1,3 @@
+C:/myGit/CSGO/GO_internalAim/cmake-build-debug/CMakeFiles/GO_internalAim.dir
+C:/myGit/CSGO/GO_internalAim/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/myGit/CSGO/GO_internalAim/cmake-build-debug/CMakeFiles/rebuild_cache.dir
