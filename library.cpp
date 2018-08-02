@@ -70,12 +70,12 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     float fovAllow = 20;
     float distAllow = 20;
     uintptr_t smoothNum = 10000;//higher is slower
-    soldier* closest;
+    soldier* closest = ents[1];
     soldier* enemy;
-    float minDist = 9999999999.0;
+    float minDist = 9999999.0;
     float enDist = minDist;
     float angleX, angleY, cloAngleX, cloAngleY = 0.0;
-    int numOfPlayers = (int)ents.size();
+    uintptr_t numOfPlayers = ents.size();
     bool found = false;
 
     for (int i = 0; i < (numOfPlayers - 1); i++)
@@ -83,50 +83,57 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 //        if (IsValidEnt(ents.at(i))) {//won't go in yet because isvalid should always be returning false
 
             enemy = ents[i];
-            if(i == 2){
-                system("CLS");
-                std::cout << "\nhealth of" << i  << ": " << enemy->health << "\n";
-                std::cout << enemy->position.x << "\n";
-                std::cout << enemy->position.y << "\n";
-                std::cout << enemy->position.z << "\n";
-            }
 
             if (enemy->health > 0 && enemy->health <= 100){//check if alive
-//                if(enemy->team != player->team && (enemy->team == 0 || enemy->team == 1)) {
+////                if(enemy->team != player->team && (enemy->team == 0 || enemy->team == 1)) {
                     enDist = distance3D(player->position.x, player->position.y, player->position.z, enemy->position.x, enemy->position.y, enemy->position.z);
-//                    std::cout << "distance" << ": " << enDist << "\n";
-                    angleX = (-(float) atan2(enemy->position.x - player->position.x, enemy->position.y - player->position.y)) / 3.14159265358979323846 * 180.0f + 180.0f;
-                    angleY = (atan2(enemy->position.z - player->position.z, enDist)) * 180.0f / 3.14159265358979323846;
-
-//                angleX = (-(float) atan2(enemy->head.x - player->head.x, enemy->head.y - player->head.y)) / 3.14159265358979323846 * 180.0f + 180.0f;
-//                angleY = (atan2(enemy->head.z - player->head.z, enDist)) * 180.0f / 3.14159265358979323846;
-
-                    if (!(abs(angleX - player->aimCoords.x) > fovAllow || abs(angleY - player->aimCoords.y) > fovAllow)) {
+//                    angleX = (-(float) atan2(enemy->position.x - player->position.x, enemy->position.y - player->position.y)) / 3.14159265358979323846 * 180.0f + 180.0f;
+//                    angleY = (atan2(enemy->position.z - player->position.z, enDist)) * 180.0f / 3.14159265358979323846;
+//
+////                angleX = (-(float) atan2(enemy->head.x - player->head.x, enemy->head.y - player->head.y)) / 3.14159265358979323846 * 180.0f + 180.0f;
+////                angleY = (atan2(enemy->head.z - player->head.z, enDist)) * 180.0f / 3.14159265358979323846;
+//
+//                    if (!(abs(angleX - player->aimCoords.x) > fovAllow || abs(angleY - player->aimCoords.y) > fovAllow)) {
                         if (enDist < minDist) {
                             closest = enemy;
                             minDist = enDist;
+//                            system("CLS");
+//                            std::cout << "\nhealth of closest" << ": " << enemy->health << "\n";
+//                            std::cout << enemy->position.x << "\n";
+//                            std::cout << enemy->position.y << "\n";
+//                            std::cout << enemy->position.z << "\n";
+//                            std::cout << minDist << "\n";
                             found = true;
-                            cloAngleX = angleX;
-                            cloAngleY = angleY;
+//                            cloAngleX = angleX;
+//                            cloAngleY = angleY;
                         }
                     }
-                }
-            }
+//            }
+    }
 //        }
 
     if (found) {
-        cloAngleX = player->aimCoords.x + (cloAngleX - player->aimCoords.x) / smoothNum;
-        player->aimCoords.x = cloAngleX;
 
-        cloAngleY = player->aimCoords.y + (cloAngleY - player->aimCoords.y) / smoothNum;
-        player->aimCoords.y = cloAngleY;
+        system("CLS");
+        std::cout << "health of closest" << ": " << closest->health << "\n";
+        std::cout << closest->position.x << "\n";
+        std::cout << closest->position.y << "\n";
+        std::cout << closest->position.z << "\n";
+        std::cout << minDist << "\n"; //this might be the trouble spot
+        
 
+//        cloAngleX = player->aimCoords.x + (cloAngleX - player->aimCoords.x) / smoothNum;
+//        player->aimCoords.x = cloAngleX;
+//
+//        cloAngleY = player->aimCoords.y + (cloAngleY - player->aimCoords.y) / smoothNum;
+//        player->aimCoords.y = cloAngleY;
 
-        *aimY = cloAngleY;
-        *aimX = cloAngleX;
+//
+//        *aimY = cloAngleY;
+//        *aimX = cloAngleX;
 //        std::cout << "start" << "\n";
-        std::cout << "cloY: " << cloAngleY << "mine: " << *(float*)aimY << "\n";
-        std::cout << "cloX: " << cloAngleX << "mine: " << *(float*)aimX << "\n";
+//        std::cout << "cloY: " << cloAngleY << "mine: " << *(float*)aimY << "\n";
+//        std::cout << "cloX: " << cloAngleX << "mine: " << *(float*)aimX << "\n";
 
 
 
@@ -149,7 +156,7 @@ std::vector<soldier *> ents;
 
 DWORD __stdcall hackthread(void* param)
 {
-    int numPlayers = 10;
+    uintptr_t numPlayers = 10;
     FILE *pFile = nullptr;
     AllocConsole();
     freopen_s(&pFile, "CONOUT$", "w", stdout);
@@ -159,7 +166,7 @@ DWORD __stdcall hackthread(void* param)
     std::cout << "                         f3 to quit\n";
     std::cout << "----------------------------------------------------------------------\n";
 
-    for(int i = 1; i < numPlayers; i++) {
+    for(uintptr_t i = 1; i < numPlayers; i++) {
         ents.push_back(*(soldier **) (baseEntity + (0x10 * i))); //this is the player
     }
     ents.resize(numPlayers);
@@ -170,12 +177,17 @@ DWORD __stdcall hackthread(void* param)
 
             Aimbot(localPlayer, ents);
 //            system("CLS");
+//            std::cout << localPlayer->health << "\n";
+//            std::cout << localPlayer->position.x << "\n";
+//            std::cout << localPlayer->position.y << "\n";
+//            std::cout << localPlayer->position.z << "\n";
 //            std::cout << "0 " << localPlayer->health << "\n";
-//            for(int i = 1; i < numPlayers; i++){
+            for(uintptr_t  i = 1; i < numPlayers - 1; i++){
 //                soldier * current =  *(soldier **) (baseEntity + (0x10 * i));
 //                std::cout << i << " " << current->health << "\n";
+
 //                std::cout << i << " " << ents[i]->health<< "\n";
-//            }
+            }
 
 
 
