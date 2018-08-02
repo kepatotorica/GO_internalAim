@@ -62,12 +62,18 @@ uintptr_t aimYOffs[] = {0x4D10};
 uintptr_t aimXOffs[] = {0x4D14};
 
 DWORD dwEngine	= (DWORD)GetModuleHandle("engine.dll");
+DWORD dwClient	= (DWORD)GetModuleHandle("client.dll");
+DWORD dwServer	= (DWORD)GetModuleHandle("server.dll");
 
 uintptr_t* add = (uintptr_t *) (dwEngine + 0x00586A74);
-
 uintptr_t* aimY = (uintptr_t*)addressFinder(add,{ aimYOffs });
-
 uintptr_t* aimX = (uintptr_t*)addressFinder(add,{ aimXOffs });
+uintptr_t numOfPlayersBaseAdd = dwServer+0x9E48E0;
+uintptr_t* numOfPlayersAdd = (uintptr_t*) numOfPlayersBaseAdd;
+uintptr_t numPlayers = *numOfPlayersAdd;
+
+
+
 
 soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     float fovAllow = 20;
@@ -78,10 +84,10 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     float minDist = 9999999.0;
     float enDist = minDist;
     float angleX, angleY, cloAngleX, cloAngleY = 0.0;
-    uintptr_t numOfPlayers = ents.size();
+    numPlayers =  *numOfPlayersAdd;
     bool found = false;
 
-    for (int i = 0; i < (numOfPlayers - 1); i++)
+    for (int i = 0; i < (numPlayers - 1); i++)
     {
 //        if (IsValidEnt(ents.at(i))) {//won't go in yet because isvalid should always be returning false
 
@@ -128,6 +134,7 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
                         }
                     }
 //            }
+        numPlayers = *numOfPlayersAdd - 1;//dwServer+0x9E48E0;//I know you probably don't need two, but honestly, fuck it
     }
 //        }
 
@@ -165,7 +172,6 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     return player;
 }
 
-DWORD dwClient	= (DWORD)GetModuleHandle("client.dll");
 uintptr_t baseEntity = dwClient + 0x04A923f4;
 uintptr_t baseAdd = dwClient + 0x00AB6D9C;
 soldier * localPlayer = *(soldier**)baseAdd;
@@ -180,7 +186,7 @@ std::vector<soldier *> ents;
 
 DWORD __stdcall hackthread(void* param)
 {
-    uintptr_t numPlayers = 10;
+    uintptr_t numPlayers =  *numOfPlayersAdd;
     FILE *pFile = nullptr;
     AllocConsole();
     freopen_s(&pFile, "CONOUT$", "w", stdout);
@@ -189,6 +195,15 @@ DWORD __stdcall hackthread(void* param)
     std::cout << "          right click or left alt activates aimbot\n";
     std::cout << "                         f3 to quit\n";
     std::cout << "----------------------------------------------------------------------\n";
+//    uintptr_t* testVar = (uintptr_t*) dwServer+0x9E48E0;
+//    std::cout << numPlayers << "\n";
+//    std::cout << std::hex << numOfPlayersAdd << "\n";
+//    std::cout << std::hex << numOfPlayersBaseAdd << "\n";
+//    std::cout << *testVar << "\n";
+//    std::cout << dwServer << "\n";
+//    std::cout << 29460000 << "\n";
+
+    numPlayers = *numOfPlayersAdd - 1;
 
     for(uintptr_t i = 1; i < numPlayers; i++) {
         ents.push_back(*(soldier **) (baseEntity + (0x10 * i))); //this is the player
@@ -197,7 +212,7 @@ DWORD __stdcall hackthread(void* param)
 
     while (!GetAsyncKeyState(VK_F3))
     {
-        if (GetAsyncKeyState(VK_RBUTTON) || GetAsyncKeyState(VK_LCONTROL)) {
+        if (GetAsyncKeyState(VK_XBUTTON1) || GetAsyncKeyState(VK_LCONTROL)) {
 
             Aimbot(localPlayer, ents);
 

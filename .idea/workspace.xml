@@ -39,8 +39,8 @@
       <file leaf-file-name="library.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/library.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="106" column="25" selection-start-line="106" selection-start-column="25" selection-end-line="106" selection-end-column="25" />
+            <state relative-caret-position="37">
+              <caret line="90" column="5" selection-start-line="90" selection-start-column="5" selection-end-line="90" selection-end-column="5" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -59,6 +59,9 @@
       <find>dst.z</find>
       <find>src.y</find>
       <find>src.z</find>
+      <find>numPlayers</find>
+      <find>numOfPlayersAdd</find>
+      <find>numOfPlayers</find>
     </findStrings>
     <replaceStrings>
       <replace>position</replace>
@@ -66,6 +69,7 @@
       <replace>enemy</replace>
       <replace>enemy-&gt;position.z</replace>
       <replace>player-&gt;position.z</replace>
+      <replace>numPlayers</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -133,12 +137,12 @@
       <workItem from="1533068594529" duration="4472000" />
       <workItem from="1533077828355" duration="69000" />
       <workItem from="1533163109195" duration="8786000" />
-      <workItem from="1533216813876" duration="6900000" />
+      <workItem from="1533216813876" duration="12246000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36756000" />
+    <option name="totallyTimeSpent" value="42102000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="0" width="974" height="1087" extended-state="0" />
@@ -277,8 +281,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/library.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="106" column="25" selection-start-line="106" selection-start-column="25" selection-end-line="106" selection-end-column="25" />
+        <state relative-caret-position="37">
+          <caret line="90" column="5" selection-start-line="90" selection-start-column="5" selection-end-line="90" selection-end-column="5" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
