@@ -120,7 +120,7 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
         std::cout << closest->position.y << "\n";
         std::cout << closest->position.z << "\n";
         std::cout << minDist << "\n"; //this might be the trouble spot
-        
+
 
 //        cloAngleX = player->aimCoords.x + (cloAngleX - player->aimCoords.x) / smoothNum;
 //        player->aimCoords.x = cloAngleX;
