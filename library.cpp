@@ -91,7 +91,7 @@ DWORD dwServer	= (DWORD)GetModuleHandle("server.dll");
 uintptr_t* add = (uintptr_t *) (dwEngine + 0x00586A74);
 uintptr_t* aimY = (uintptr_t*)addressFinder(add,{ aimYOffs });
 uintptr_t* aimX = (uintptr_t*)addressFinder(add,{ aimXOffs });
-uintptr_t numOfPlayersBaseAdd = dwServer+0x9E48E0;
+uintptr_t numOfPlayersBaseAdd = dwServer+0x9E48D0;
 uintptr_t* numOfPlayersAdd = (uintptr_t*) numOfPlayersBaseAdd;
 uintptr_t numPlayers = *numOfPlayersAdd;
 
@@ -197,16 +197,11 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     return player;
 }
 
-uintptr_t baseEntity = dwClient + 0x04C37FDC;//0x04A923f4;
-uintptr_t baseAdd = dwClient + 0x00C5B80C;//0x00AB6D9C;
+uintptr_t baseEntity = dwClient + 0x04C380EC - 0x10;//0x04A923f4;
+uintptr_t baseAdd = baseEntity;//dwClient + 0x04C380EC - 0x10; //0x00AB6D9C;
 soldier * localPlayer = *(soldier**)baseAdd;
 std::vector<soldier *> ents;
 
-//26552404
-//22576D9C
-
-// aimY 0x55A86A74 dereferenced the offset with 0x4D10
-// aimX is above but with 0x4D14
 
 
 DWORD __stdcall hackthread(void* param)
@@ -239,12 +234,13 @@ DWORD __stdcall hackthread(void* param)
     {
         if (GetAsyncKeyState(VK_XBUTTON1) || GetAsyncKeyState(VK_LCONTROL)) {
 
-//            Aimbot(localPlayer, ents);
+            Aimbot(localPlayer, ents);
 
 //            if (aimY != 0) {        // safe to dereference
 //                *aimY = 20;
 //                *aimX = 20;
 //                std::cout << "start" << "\n";
+//                std::cout << localPlayer->health << "\n";
 //                std::cout << *(float*)aimY << "\n";
 //                std::cout << *(float*)aimX << "\n";
 //
