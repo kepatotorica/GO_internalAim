@@ -197,7 +197,7 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     return player;
 }
 
-uintptr_t baseEntity = dwClient + 0x04C37FEC - 0x10;//0x04A923f4;
+uintptr_t baseEntity = dwClient + 0x04C37FDC;//0x04A923f4;
 uintptr_t baseAdd = dwClient + 0x00C5B80C;//0x00AB6D9C;
 soldier * localPlayer = *(soldier**)baseAdd;
 std::vector<soldier *> ents;
@@ -239,7 +239,7 @@ DWORD __stdcall hackthread(void* param)
     {
         if (GetAsyncKeyState(VK_XBUTTON1) || GetAsyncKeyState(VK_LCONTROL)) {
 
-            Aimbot(localPlayer, ents);
+//            Aimbot(localPlayer, ents);
 
 //            if (aimY != 0) {        // safe to dereference
 //                *aimY = 20;
