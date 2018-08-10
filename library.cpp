@@ -109,10 +109,14 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     float angleX, angleY, cloAngleX, cloAngleY = 0.0;
     numPlayers =  *numOfPlayersAdd;
     bool found = false;
+    float rangeBottom0,rangeBottom1, rangeTop0, rangeTop1 = 0;
 
     for (int i = 0; i < numPlayers; i++)
     {
 //        if (IsValidEnt(ents.at(i))) {//won't go in yet because isvalid should always be returning false
+        boolean inFov;
+
+
 
         enemy = ents[i];
         if(enemy->visible != 0 ) {
@@ -120,42 +124,44 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
                 if (enemy->team != player->team /*&& (enemy->team == 0 || enemy->team == 1)*/) {
                     enDist = distance3D(player->position.x, player->position.y, player->position.z,
                                         enemy->position.x, enemy->position.y, enemy->position.z);
-                    //                        angleX  = ((float)atan2(enemy->position.x - player->position.x, enemy->position.y - player->position.y)) / 3.14159265358979323846 * 180.0f;
-                    //                        angleY = (atan2(enemy->position.z - player->position.z, enDist)) * 180.0f / 3.14159265358979323846;
+
+                    Vector3 Pos;
+
+                    Pos.x = enemy->position.x - player->position.x;
+                    Pos.y = enemy->position.y - player->position.y;
+                    Pos.z = enemy->position.z - player->position.z;
+
+                    float Magnitude = sqrt(Pos.x * Pos.x + Pos.y * Pos.y + Pos.z * Pos.z);
+
+                    angleX = (float) atan2(Pos.y, Pos.x) * 180.0 / 3.14159265358979323846;
+                    angleY = -1 * (atan2(Pos.z, Magnitude) * 180.0 / 3.14159265358979323846);
+
+//
+//                    if(*(float*)aimX + fovAllow > 180){
+//                        rangeBottom0 = *(float*)aimX - fovAllow;
+//                        rangeBottom1 = *(float*)aimX - fovAllow;
+//                        rangeTop0 = 0;
+//                        rangeTop1 =  - 180 + (fovAllow  - (180 - *(float*)aimY));
+//
+//
+//                    }
+//
+//
 
 
+//                    if (!(abs(angleX - player->aimCoords.x) > fovAllow ||
+//                          abs(angleY - player->aimCoords.y) > fovAllow)) {
+                        if (enDist < minDist) {
+                            closest = enemy;
+                            minDist = enDist;
 
-                    Vector3 Angle;
-
-                    Angle.x = enemy->position.x - player->position.x;
-                    Angle.y = enemy->position.y - player->position.y;
-                    Angle.z = enemy->position.z - player->position.z;
-
-                    float Magnitude = sqrt(Angle.x * Angle.x + Angle.y * Angle.y + Angle.z * Angle.z);
-
-                    angleX = (float) atan2(Angle.y, Angle.x) * 180.0 / 3.14159265358979323846;
-                    angleY = -1 * (atan2(Angle.z, Magnitude) * 180.0 / 3.14159265358979323846);
+                            found = true;
+                            cloAngleX = angleX;
+                            cloAngleY = angleY;
 
 
-
-                    //                    angleX = (-(float) atan2(enemy->position.x - player->position.x, enemy->position.y - player->position.y)) / 3.14159265358979323846 * 180.0f + 180.0f;
-                    //                    angleY = (atan2(enemy->position.z - player->position.z, enDist)) * 180.0f / 3.14159265358979323846;
-
-
-                    //                    if (!(abs(angleX - player->aimCoords.x) > fovAllow || abs(angleY - player->aimCoords.y) > fovAllow)) {
-                    if (enDist < minDist) {
-                        closest = enemy;
-                        minDist = enDist;
-                        //                            system("CLS");
-                        //                            std::cout << "\nhealth of closest" << ": " << enemy->health << "\n";
-                        //                            std::cout << enemy->position.x << "\n";
-                        //                            std::cout << enemy->position.y << "\n";
-                        //                            std::cout << enemy->position.z << "\n";
-                        //                            std::cout << minDist << "\n";
-                        found = true;
-                        cloAngleX = angleX;
-                        cloAngleY = angleY;
-                    }
+                        }
+//                    }
                 }
             }
         }
@@ -177,19 +183,30 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 //        std::cout << "mine: " << *(float*)aimX << "\n";
 
 
+
+//        system("CLS");
+//        std::cout << "mY: " << *(float*)aimY << "\n";
+//        std::cout << "mX: " << *(float*)aimX << "\n";
+//        std::cout << "aY: " << cloAngleY  << "\n";
+//        std::cout << "aX: " << cloAngleX  << "\n";
+
 //        cloAngleX = player->aimCoords.x + (cloAngleX - player->aimCoords.x) / smoothNum;
 //        player->aimCoords.x = cloAngleX;
-        *(float*)aimX = cloAngleX;
+
 //
 //        cloAngleY = player->aimCoords.y + (cloAngleY - player->aimCoords.y) / smoothNum;
 //        player->aimCoords.y = cloAngleY;
+
+        *(float*)aimX = cloAngleX;
         *(float*)aimY = cloAngleY;
-//
-//        *aimY = cloAngleY;
-//        *aimX = cloAngleX;
-//        std::cout << "start" << "\n";
-//        std::cout << "cloY: " << cloAngleY << "mine: " << *(float*)aimY << "\n";
-//        std::cout << "cloX: " << cloAngleX << "mine: " << *(float*)aimX << "\n";
+
+//        system("CLS");
+//        std::cout << "mY: " << *(float*)aimY << "\n";
+//        std::cout << "mX: " << *(float*)aimX << "\n";
+//        std::cout << "aY: " << cloAngleY  << "\n";
+//        std::cout << "aX: " << cloAngleX  << "\n";
+//        std::cout << "rBot: " << rangeBottom0 << " <-> " << rangeBottom1 << "\n";
+//        std::cout << "rTop: " << rangeTop0 << " <-> " << rangeTop1 << "\n";
 
 
 
