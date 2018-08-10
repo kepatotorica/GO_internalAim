@@ -110,55 +110,55 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     numPlayers =  *numOfPlayersAdd;
     bool found = false;
 
-    for (int i = 0; i < (numPlayers - 1); i++)
+    for (int i = 0; i < numPlayers; i++)
     {
 //        if (IsValidEnt(ents.at(i))) {//won't go in yet because isvalid should always be returning false
 
-            enemy = ents[i];
-            if(enemy->visible != 0 ) {
-                if (enemy->health > 0 && enemy->health <= 100) {//check if alive
-                    if (enemy->team != player->team /*&& (enemy->team == 0 || enemy->team == 1)*/) {
-                        enDist = distance3D(player->position.x, player->position.y, player->position.z,
-                                            enemy->position.x, enemy->position.y, enemy->position.z);
-                        //                        angleX  = ((float)atan2(enemy->position.x - player->position.x, enemy->position.y - player->position.y)) / 3.14159265358979323846 * 180.0f;
-                        //                        angleY = (atan2(enemy->position.z - player->position.z, enDist)) * 180.0f / 3.14159265358979323846;
+        enemy = ents[i];
+        if(enemy->visible != 0 ) {
+            if (enemy->health > 0 && enemy->health <= 100) {//check if alive
+                if (enemy->team != player->team /*&& (enemy->team == 0 || enemy->team == 1)*/) {
+                    enDist = distance3D(player->position.x, player->position.y, player->position.z,
+                                        enemy->position.x, enemy->position.y, enemy->position.z);
+                    //                        angleX  = ((float)atan2(enemy->position.x - player->position.x, enemy->position.y - player->position.y)) / 3.14159265358979323846 * 180.0f;
+                    //                        angleY = (atan2(enemy->position.z - player->position.z, enDist)) * 180.0f / 3.14159265358979323846;
 
 
 
-                        Vector3 Angle;
+                    Vector3 Angle;
 
-                        Angle.x = enemy->position.x - player->position.x;
-                        Angle.y = enemy->position.y - player->position.y;
-                        Angle.z = enemy->position.z - player->position.z;
+                    Angle.x = enemy->position.x - player->position.x;
+                    Angle.y = enemy->position.y - player->position.y;
+                    Angle.z = enemy->position.z - player->position.z;
 
-                        float Magnitude = sqrt(Angle.x * Angle.x + Angle.y * Angle.y + Angle.z * Angle.z);
+                    float Magnitude = sqrt(Angle.x * Angle.x + Angle.y * Angle.y + Angle.z * Angle.z);
 
-                        angleX = (float) atan2(Angle.y, Angle.x) * 180.0 / 3.14159265358979323846;
-                        angleY = -1 * (atan2(Angle.z, Magnitude) * 180.0 / 3.14159265358979323846);
-
-
-
-                        //                    angleX = (-(float) atan2(enemy->position.x - player->position.x, enemy->position.y - player->position.y)) / 3.14159265358979323846 * 180.0f + 180.0f;
-                        //                    angleY = (atan2(enemy->position.z - player->position.z, enDist)) * 180.0f / 3.14159265358979323846;
+                    angleX = (float) atan2(Angle.y, Angle.x) * 180.0 / 3.14159265358979323846;
+                    angleY = -1 * (atan2(Angle.z, Magnitude) * 180.0 / 3.14159265358979323846);
 
 
-                        //                    if (!(abs(angleX - player->aimCoords.x) > fovAllow || abs(angleY - player->aimCoords.y) > fovAllow)) {
-                        if (enDist < minDist) {
-                            closest = enemy;
-                            minDist = enDist;
-                            //                            system("CLS");
-                            //                            std::cout << "\nhealth of closest" << ": " << enemy->health << "\n";
-                            //                            std::cout << enemy->position.x << "\n";
-                            //                            std::cout << enemy->position.y << "\n";
-                            //                            std::cout << enemy->position.z << "\n";
-                            //                            std::cout << minDist << "\n";
-                            found = true;
-                            cloAngleX = angleX;
-                            cloAngleY = angleY;
-                        }
+
+                    //                    angleX = (-(float) atan2(enemy->position.x - player->position.x, enemy->position.y - player->position.y)) / 3.14159265358979323846 * 180.0f + 180.0f;
+                    //                    angleY = (atan2(enemy->position.z - player->position.z, enDist)) * 180.0f / 3.14159265358979323846;
+
+
+                    //                    if (!(abs(angleX - player->aimCoords.x) > fovAllow || abs(angleY - player->aimCoords.y) > fovAllow)) {
+                    if (enDist < minDist) {
+                        closest = enemy;
+                        minDist = enDist;
+                        //                            system("CLS");
+                        //                            std::cout << "\nhealth of closest" << ": " << enemy->health << "\n";
+                        //                            std::cout << enemy->position.x << "\n";
+                        //                            std::cout << enemy->position.y << "\n";
+                        //                            std::cout << enemy->position.z << "\n";
+                        //                            std::cout << minDist << "\n";
+                        found = true;
+                        cloAngleX = angleX;
+                        cloAngleY = angleY;
                     }
                 }
             }
+        }
         numPlayers = *numOfPlayersAdd - 1;//dwServer+0x9E48E0;//I know you probably don't need two, but honestly, fuck it
     }
 //        }
@@ -223,7 +223,7 @@ DWORD __stdcall hackthread(void* param)
 //    std::cout << dwServer << "\n";
 //    std::cout << 29460000 << "\n";
 
-    numPlayers = *numOfPlayersAdd - 1;
+    numPlayers = *numOfPlayersAdd;
 
     for(uintptr_t i = 1; i < numPlayers; i++) {
         ents.push_back(*(soldier **) (baseEntity + (0x10 * i))); //this is the player
@@ -266,5 +266,5 @@ BOOL WINAPI DllMain(HINSTANCE hModule, DWORD dwReason, LPVOID lpReserved)
         case DLL_PROCESS_DETACH:
             break;
     }
-return TRUE;
+    return TRUE;
 }
