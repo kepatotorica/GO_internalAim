@@ -101,7 +101,8 @@ uintptr_t numPlayers = *numOfPlayersAdd;
 soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 //    config
     float distAllow = 20;
-    float fovAllow = 20;
+    float fovAllowX = 10;
+    float fovAllowY = 10;
     uintptr_t smoothNum = 10000;//higher is slower
 //    ====================
 
@@ -110,6 +111,8 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     float rangeBot1 = 1;
     float rangeTop0 = 1;
     float rangeTop1 = 1;
+    float yRangeTop = 0;
+    float yRangeBot = -0;
     bool inFovX = false;
     bool inFovY = false;
 //    ====================
@@ -119,12 +122,10 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     float cloAngleX, cloAngleY = 0.0;
 
     bool found = false;
-
     soldier* closest = ents[1];
     soldier* enemy;
     float minDist = 9999999.0;
     float enDist = minDist;
-
     numPlayers =  *numOfPlayersAdd;
 
 
@@ -135,7 +136,7 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 //    std::cout << "aY: " << cloAngleY  << "\n";
 //    std::cout << "aX: " << cloAngleX  << "\n";
 
-    for (int i = 1; i < numPlayers; i++)
+    for (int i = 0; i < numPlayers; i++)
     {
 //        if (IsValidEnt(ents.at(i))) {//won't go in yet because isvalid should always be returning false
         boolean inFov;
@@ -160,39 +161,36 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
                     angleX = (float) atan2(Pos.y, Pos.x) * 180.0 / 3.14159265358979323846;
                     angleY = -1 * (atan2(Pos.z, Magnitude) * 180.0 / 3.14159265358979323846);
 
-                    rangeBot0 = *(float*)aimX - fovAllow;
+                    rangeBot0 = *(float*)aimX - fovAllowX;
                     rangeBot1 = *(float*)aimX;
                     rangeTop0 = *(float*)aimX;
-                    rangeTop1 = *(float*)aimX + fovAllow;
+                    rangeTop1 = *(float*)aimX + fovAllowX;
+                    yRangeTop = *(float*)aimY + fovAllowY;
+                    yRangeBot = *(float*)aimY - fovAllowY;
+
+                    if((angleX <= rangeTop1 && angleX >= rangeTop0 ) || (angleX <= rangeBot1 && angleX >= rangeBot0 )) inFovX = true;
 
 
-                    if((*(float*)aimX <= rangeTop1 && *(float*)aimX >= rangeTop0 ) || (*(float*)aimX <= rangeBot1 && *(float*)aimX >= rangeBot0 )) { inFovX = true;}
-
-
-                    if(rangeTop1 > 180){
+                    if(rangeTop1 >= 180){
                         rangeTop1 = -180 + (rangeTop1 - 180);
                         rangeTop0 = -180;
-                        if((*(float*)aimX <= rangeTop0 && *(float*)aimX >= rangeTop1 )){ inFovX = true;}
+                        if(angleX >= rangeTop0 && angleX <= rangeTop1) inFovX = true;
+
                     }
 
-                    if(rangeBot0 < -180){
-                        rangeBot0 = 180 + (rangeTop1 + 180);
-                        rangeBot1 = 0;
-                        if((*(float*)aimX <= rangeBot0 && *(float*)aimX >= rangeBot1 )) {inFovX = true;}
+                    if(rangeBot0 <= -180){
+                        rangeBot0 = 180 - (rangeTop1 + 180);
+                        rangeBot1 = 180;
+                        if(angleX >= rangeBot0 && angleX <= rangeBot1) inFovX = true;
                     }
 
-//                    if (!(abs(angleX - player->aimCoords.x) > fovAllow ||
-//                          abs(angleY - player->aimCoords.y) > fovAllow)) {
-                    if(inFovX) {
+                    if(inFovX && (angleY >= yRangeBot && angleY <= yRangeTop)) {
                         if (enDist < minDist) {
                             closest = enemy;
                             minDist = enDist;
-
                             found = true;
                             cloAngleX = angleX;
                             cloAngleY = angleY;
-
-
                         }
                     }
                 }
@@ -213,16 +211,13 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 
         *(float*)aimX = cloAngleX;
         *(float*)aimY = cloAngleY;
-//
+
+
 //        system("CLS");
-//        std::cout << "mY: " << *(float*)aimY << "\n";
-//        std::cout << "mX: " << *(float*)aimX << "\n";
-//        std::cout << "aY: " << cloAngleY  << "\n";
-//        std::cout << "aX: " << cloAngleX  << "\n";
-//        std::cout << "rBot: " << rangeBottom0 << " <-> " << rangeBottom1 << "\n";
-//        std::cout << "rTop: " << rangeTop0 << " <-> " << rangeTop1 << "\n";
-
-
+//        std::cout << "aimX: " << *(float*)aimX << std::endl;
+//        std::cout << "top0: "<< rangeTop0 << " top1: "<< rangeTop1 << std::endl;
+//        std::cout << "bot0: "<< rangeBot0 << " bot1: "<< rangeBot1 << std::endl;
+//        std::cout << angleX << " is " << inFovX << std::endl;
 
     }
     return player;
@@ -246,13 +241,6 @@ DWORD __stdcall hackthread(void* param)
     std::cout << "            mouse 5 or left alt activates aimbot\n";
     std::cout << "                         f3 to quit\n";
     std::cout << "----------------------------------------------------------------------\n";
-//    uintptr_t* testVar = (uintptr_t*) dwServer+0x9E48E0;
-//    std::cout << numPlayers << "\n";
-//    std::cout << std::hex << numOfPlayersAdd << "\n";
-//    std::cout << std::hex << numOfPlayersBaseAdd << "\n";
-//    std::cout << *testVar << "\n";
-//    std::cout << dwServer << "\n";
-//    std::cout << 29460000 << "\n";
 
     numPlayers = *numOfPlayersAdd;
 
