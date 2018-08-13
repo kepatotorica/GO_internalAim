@@ -99,19 +99,43 @@ uintptr_t numPlayers = *numOfPlayersAdd;
 
 
 soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
-    float fovAllow = 20;
+//    config
     float distAllow = 20;
+    float fovAllow = 20;
     uintptr_t smoothNum = 10000;//higher is slower
+//    ====================
+
+//    range tracking
+    float rangeBot0 = 1;
+    float rangeBot1 = 1;
+    float rangeTop0 = 1;
+    float rangeTop1 = 1;
+    bool inFovX = false;
+    bool inFovY = false;
+//    ====================
+
+    float angleX = 100;
+    float angleY = 1;
+    float cloAngleX, cloAngleY = 0.0;
+
+    bool found = false;
+
     soldier* closest = ents[1];
     soldier* enemy;
     float minDist = 9999999.0;
     float enDist = minDist;
-    float angleX, angleY, cloAngleX, cloAngleY = 0.0;
-    numPlayers =  *numOfPlayersAdd;
-    bool found = false;
-    float rangeBottom0,rangeBottom1, rangeTop0, rangeTop1 = 0;
 
-    for (int i = 0; i < numPlayers; i++)
+    numPlayers =  *numOfPlayersAdd;
+
+
+
+//    system("CLS");
+//    std::cout << "mY: " << *(float*)aimY << "\n";
+//    std::cout << "mX: " << *(float*)aimX << "\n";
+//    std::cout << "aY: " << cloAngleY  << "\n";
+//    std::cout << "aX: " << cloAngleX  << "\n";
+
+    for (int i = 1; i < numPlayers; i++)
     {
 //        if (IsValidEnt(ents.at(i))) {//won't go in yet because isvalid should always be returning false
         boolean inFov;
@@ -121,7 +145,7 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
         enemy = ents[i];
         if(enemy->visible != 0 ) {
             if (enemy->health > 0 && enemy->health <= 100) {//check if alive
-                if (enemy->team != player->team /*&& (enemy->team == 0 || enemy->team == 1)*/) {
+                if (enemy->team != player->team) {
                     enDist = distance3D(player->position.x, player->position.y, player->position.z,
                                         enemy->position.x, enemy->position.y, enemy->position.z);
 
@@ -136,21 +160,30 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
                     angleX = (float) atan2(Pos.y, Pos.x) * 180.0 / 3.14159265358979323846;
                     angleY = -1 * (atan2(Pos.z, Magnitude) * 180.0 / 3.14159265358979323846);
 
-//
-//                    if(*(float*)aimX + fovAllow > 180){
-//                        rangeBottom0 = *(float*)aimX - fovAllow;
-//                        rangeBottom1 = *(float*)aimX - fovAllow;
-//                        rangeTop0 = 0;
-//                        rangeTop1 =  - 180 + (fovAllow  - (180 - *(float*)aimY));
-//
-//
-//                    }
-//
-//
+                    rangeBot0 = *(float*)aimX - fovAllow;
+                    rangeBot1 = *(float*)aimX;
+                    rangeTop0 = *(float*)aimX;
+                    rangeTop1 = *(float*)aimX + fovAllow;
 
+
+                    if((*(float*)aimX <= rangeTop1 && *(float*)aimX >= rangeTop0 ) || (*(float*)aimX <= rangeBot1 && *(float*)aimX >= rangeBot0 )) { inFovX = true;}
+
+
+                    if(rangeTop1 > 180){
+                        rangeTop1 = -180 + (rangeTop1 - 180);
+                        rangeTop0 = -180;
+                        if((*(float*)aimX <= rangeTop0 && *(float*)aimX >= rangeTop1 )){ inFovX = true;}
+                    }
+
+                    if(rangeBot0 < -180){
+                        rangeBot0 = 180 + (rangeTop1 + 180);
+                        rangeBot1 = 0;
+                        if((*(float*)aimX <= rangeBot0 && *(float*)aimX >= rangeBot1 )) {inFovX = true;}
+                    }
 
 //                    if (!(abs(angleX - player->aimCoords.x) > fovAllow ||
 //                          abs(angleY - player->aimCoords.y) > fovAllow)) {
+                    if(inFovX) {
                         if (enDist < minDist) {
                             closest = enemy;
                             minDist = enDist;
@@ -161,7 +194,7 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 
 
                         }
-//                    }
+                    }
                 }
             }
         }
@@ -170,25 +203,6 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 //        }
 
     if (found) {
-
-//        system("CLS");
-//        std::cout << "health of closest" << ": " << closest->health << "\n";
-//        std::cout << closest->position.x << "\n";
-//        std::cout << closest->position.y << "\n";
-//        std::cout << closest->position.z << "\n";
-//        std::cout << minDist << "\n"; //this might be the trouble spot
-//        std::cout << "cloY: " << cloAngleY  << "\n";
-//        std::cout << "cloX: " << cloAngleX  << "\n";
-//        std::cout << "mine: " << *(float*)aimY << "\n";
-//        std::cout << "mine: " << *(float*)aimX << "\n";
-
-
-
-//        system("CLS");
-//        std::cout << "mY: " << *(float*)aimY << "\n";
-//        std::cout << "mX: " << *(float*)aimX << "\n";
-//        std::cout << "aY: " << cloAngleY  << "\n";
-//        std::cout << "aX: " << cloAngleX  << "\n";
 
 //        cloAngleX = player->aimCoords.x + (cloAngleX - player->aimCoords.x) / smoothNum;
 //        player->aimCoords.x = cloAngleX;
@@ -199,7 +213,7 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 
         *(float*)aimX = cloAngleX;
         *(float*)aimY = cloAngleY;
-
+//
 //        system("CLS");
 //        std::cout << "mY: " << *(float*)aimY << "\n";
 //        std::cout << "mX: " << *(float*)aimX << "\n";
@@ -229,7 +243,7 @@ DWORD __stdcall hackthread(void* param)
     freopen_s(&pFile, "CONOUT$", "w", stdout);
     std::cout << "----------------------------------------------------------------------\n";
     std::cout << "                Kip's CSGO internal aimbot\n";
-    std::cout << "          right click or left alt activates aimbot\n";
+    std::cout << "            mouse 5 or left alt activates aimbot\n";
     std::cout << "                         f3 to quit\n";
     std::cout << "----------------------------------------------------------------------\n";
 //    uintptr_t* testVar = (uintptr_t*) dwServer+0x9E48E0;

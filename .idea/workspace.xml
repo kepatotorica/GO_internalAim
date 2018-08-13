@@ -15,6 +15,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3b219d2-c787-48d3-9293-30f9539dd3a7" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/library.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/library.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -41,8 +42,8 @@
       <file leaf-file-name="library.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/library.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="503">
-              <caret line="206" column="52" lean-forward="true" selection-start-line="202" selection-start-column="24" selection-end-line="206" selection-end-column="52" />
+            <state relative-caret-position="391">
+              <caret line="197" column="17" lean-forward="true" selection-start-line="197" selection-start-column="17" selection-end-line="197" selection-end-column="17" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -65,6 +66,7 @@
       <find>numOfPlayersAdd</find>
       <find>numOfPlayers</find>
       <find>Angle.</find>
+      <find>aimX</find>
     </findStrings>
     <replaceStrings>
       <replace>position</replace>
@@ -96,14 +98,12 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="ProjectPane" />
-      <pane id="Scope" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../AssaultCube/entLoop" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.smartKeys" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -150,11 +150,15 @@
       <workItem from="1533837038424" duration="417000" />
       <workItem from="1533838224161" duration="1481000" />
       <workItem from="1533908939690" duration="9212000" />
+      <workItem from="1533930774996" duration="2921000" />
+      <workItem from="1533968433553" duration="1200000" />
+      <workItem from="1534089543469" duration="1582000" />
+      <workItem from="1534177231155" duration="2594000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62333000" />
+    <option name="totallyTimeSpent" value="70630000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="0" width="974" height="1087" extended-state="0" />
@@ -162,10 +166,9 @@
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.30021366" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Messages" order="7" visible="true" weight="0.32982087" />
+      <window_info active="true" anchor="bottom" id="Messages" order="7" visible="true" weight="0.33192834" />
       <window_info anchor="bottom" id="CMake" order="7" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -178,6 +181,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -189,6 +193,38 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2176">
+          <caret line="128" column="34" selection-start-line="128" selection-start-column="34" selection-end-line="128" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3502">
+          <caret line="206" column="52" lean-forward="true" selection-start-line="202" selection-start-column="24" selection-end-line="206" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -421,8 +457,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/library.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="503">
-          <caret line="206" column="52" lean-forward="true" selection-start-line="202" selection-start-column="24" selection-end-line="206" selection-end-column="52" />
+        <state relative-caret-position="391">
+          <caret line="197" column="17" lean-forward="true" selection-start-line="197" selection-start-column="17" selection-end-line="197" selection-end-column="17" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
