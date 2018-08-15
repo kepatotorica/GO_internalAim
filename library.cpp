@@ -101,8 +101,8 @@ uintptr_t numPlayers = *numOfPlayersAdd;
 soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
 //    config
     float distAllow = 20;
-    float fovAllowX = 10;
-    float fovAllowY = 10;
+    float fovAllowX = 80;
+    float fovAllowY = 80;
     uintptr_t smoothNum = 10000;//higher is slower
 //    ====================
 
