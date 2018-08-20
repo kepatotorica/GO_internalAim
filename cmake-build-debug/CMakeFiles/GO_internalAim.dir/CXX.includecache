@@ -6,14 +6,36 @@
 
 #IncludeRegexTransform: 
 
+C:/myGit/CSGO/GO_internalAim/aobFinder.h
+windows.h
+-
+cstring
+-
+psapi.h
+-
+
+C:/myGit/CSGO/GO_internalAim/ghAob.h
+vector
+-
+Windows.h
+-
+psapi.h
+-
+
 C:/myGit/CSGO/GO_internalAim/library.cpp
 library.h
 C:/myGit/CSGO/GO_internalAim/library.h
+aobFinder.h
+C:/myGit/CSGO/GO_internalAim/aobFinder.h
 windows.h
 -
 iostream
 -
 vector
+-
+ghAob.h
+C:/myGit/CSGO/GO_internalAim/ghAob.h
+psapi.h
 -
 
 C:/myGit/CSGO/GO_internalAim/library.h

@@ -1,7 +1,11 @@
 #include "library.h"
+#include "aobFinder.h"
 #include <windows.h>
 #include <iostream>
-#include<vector>
+#include <vector>
+#include "ghAob.h"
+#include <psapi.h>
+#pragma comment (lib, "Psapi.lib")
 // Generated using ReClass 2016
 
 
@@ -45,38 +49,6 @@ public:
 
 }; //Size=0x0980
 
-
-
-//class soldier
-//{
-//public:
-//    char pad_0x0000[0xA0]; //0x0000
-//    Vector3 position; //0x00A0
-//    char pad_0x00AC[0x44]; //0x00AC
-//    __int32 team; //0x00F0
-//    __int32 team2; //0x00F4
-//    char pad_0x00F8[0x4]; //0x00F8
-//    __int32 health; //0x00FC
-//    __int32 crouch; //0x0100
-//    char pad_0x0104[0x2B0]; //0x0104
-//    Vector2 aimCoords; //0x03B4
-//    char pad_0x03BC[0x484]; //0x03BC
-//
-//}; //Size=0x0840
-
-
-bool IsValidEnt(soldier* ent)
-{
-//    if (ent)
-//    {
-//        if (ent->vTable == 0x4E4A98 || ent->vTable == 0x4E4AC0)//not 100% sure what this is doing
-//        {
-//            return true;
-//        }
-//    }
-    return false;
-}
-
 float distance3D(float pX, float pY, float pZ, float eX, float eY, float eZ) {
     return sqrt(pow(pX - eX, 2.0) + pow(pY - eY, 2.0) + pow(pZ - eZ, 2.0));
 }
@@ -88,10 +60,21 @@ DWORD dwEngine	= (DWORD)GetModuleHandle("engine.dll");
 DWORD dwClient	= (DWORD)GetModuleHandle("client_panorama.dll");
 DWORD dwServer	= (DWORD)GetModuleHandle("server.dll");
 
-uintptr_t* add = (uintptr_t *) (dwEngine + 0x00586A74);
-uintptr_t* aimY = (uintptr_t*)addressFinder(add,{ aimYOffs });
-uintptr_t* aimX = (uintptr_t*)addressFinder(add,{ aimXOffs });
-uintptr_t numOfPlayersBaseAdd = dwServer+0x9E48D0;
+uintptr_t* aimAdd = (uintptr_t *) (dwEngine + 0x00586A74);
+uintptr_t* aimY = (uintptr_t*)addressFinder(aimAdd,{ aimYOffs });
+uintptr_t* aimX = (uintptr_t*)addressFinder(aimAdd,{ aimXOffs });
+
+PCHAR mPattern = "\xA5\x06\x00\x00\x88\x45\xaa\x5a\x80\x4B\xaa\x5a\xDC\xBA";
+PCHAR mMask = "xxxxxx??xx??xx";
+
+char pattern[] = "\xA5\x06\x00\x00\x88\x45\xaa\x5a\x80\x4B\xaa\x5a\xDC\xBA";
+char mask[] = "xxxxxx??xx??xx";
+
+char mod[] = "csgo.exe";
+
+DWORD aobNumPlayers = InternalSpecificModuleAoB(mod, pattern, mask);
+//uintptr_t aobNumPlayers  = FindSignature(dwServer, ImageSize, mPattern, mMask);
+uintptr_t numOfPlayersBaseAdd = dwServer + 0x9E4930 - 0x60;
 uintptr_t* numOfPlayersAdd = (uintptr_t*) numOfPlayersBaseAdd;
 uintptr_t numPlayers = *numOfPlayersAdd;
 
@@ -223,7 +206,7 @@ soldier* Aimbot(soldier *player, std::vector<soldier *> ents){
     return player;
 }
 
-uintptr_t baseEntity = dwClient + 0x04C380EC - 0x10;//0x04A923f4;
+uintptr_t baseEntity = dwClient + 0x04C3915C;//0x04A923f4;
 uintptr_t baseAdd = baseEntity;//dwClient + 0x04C380EC - 0x10; //0x00AB6D9C;
 soldier * localPlayer = *(soldier**)baseAdd;
 std::vector<soldier *> ents;

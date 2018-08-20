@@ -82,6 +82,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/myGit/CSGO/GO_internalAim/aobFinder.h">
+			<Option target="GO_internalAim"/>
+		</Unit>
+		<Unit filename="C:/myGit/CSGO/GO_internalAim/ghAob.h">
+			<Option target="GO_internalAim"/>
+		</Unit>
 		<Unit filename="C:/myGit/CSGO/GO_internalAim/library.cpp">
 			<Option target="GO_internalAim"/>
 		</Unit>

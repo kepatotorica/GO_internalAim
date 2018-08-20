@@ -3,4 +3,4 @@ project(GO_internalAim)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_library(GO_internalAim SHARED library.cpp library.h)
+add_library(GO_internalAim SHARED library.cpp library.h aobFinder.h ghAob.h)
